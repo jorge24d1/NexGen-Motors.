@@ -23,10 +23,10 @@ document.addEventListener('DOMContentLoaded', function() {
     function resetChat() {
         chatMessages.innerHTML = '';
         sessionStorage.removeItem('chatHistory');
-        addBotMessage('¡Hola! Bienvenido al concesionario KIA. ¿En qué puedo ayudarte hoy?', [
+        addBotMessage('¡Hola! Bienvenido al concesionario . ¿En qué puedo ayudarte hoy?', [
             { text: 'Vehículos disponibles', value: 'vehiculos' },
             { text: 'Agendar cita', value: 'agendar' },
-            { text: 'Promociones', value: 'promociones' },
+
             { text: 'Contactar asesor', value: 'asesor' }
         ]);
         resetInactivityTimer();
@@ -69,10 +69,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Mostrar mensaje inicial si no hay historial
     if (!sessionStorage.getItem('chatHistory')) {
-        addBotMessage('¡Hola! Bienvenido al concesionario KIA. ¿En qué puedo ayudarte hoy?', [
+        addBotMessage('¡Hola! Bienvenido al concesionario. ¿En qué puedo ayudarte hoy?', [
             { text: 'Vehículos disponibles', value: 'vehiculos' },
             { text: 'Agendar cita', value: 'agendar' },
-            { text: 'Promociones', value: 'promociones' },
             { text: 'Contactar asesor', value: 'asesor' }
         ]);
     }
@@ -155,9 +154,7 @@ document.addEventListener('DOMContentLoaded', function() {
         else if (input.includes('agendar') || input.includes('cita') || input === '2') {
             showAppointmentOptions();
         }
-        else if (input.includes('promocion') || input === '3') {
-            showPromotions();
-        }
+
         else if (input.includes('asesor') || input === '4') {
             showAdvisorOptions();
         }
@@ -194,11 +191,9 @@ document.addEventListener('DOMContentLoaded', function() {
         else if (input === 'email') {
             addBotMessage('Puedes escribirnos al correo electrónico: <a href="mailto:Nexgenmotors@gmail.com" style="color: #0066cc; text-decoration: underline;">Nexgenmotors@gmail.com</a>');
         }
-        else if (input === 'ver promociones') {
-            window.location.href = '/promociones';
-        }
+
         else if (input === 'cotizar') {
-            window.location.href = '/cotizador';
+            window.location.href = '/usuario/cita';
         }
         else {
             addBotMessage('No entendí tu solicitud. Por favor selecciona una opción del menú:');
@@ -227,13 +222,7 @@ document.addEventListener('DOMContentLoaded', function() {
         ]);
     }
 
-    function showPromotions() {
-        addBotMessage('Actualmente tenemos estas promociones:', [
-            { text: 'Ver vehículos en promoción', value: 'ver promociones' },
-            { text: 'Solicitar cotización', value: 'cotizar' },
-            { text: 'Volver al menú', value: 'menu' }
-        ]);
-    }
+
 
     function showAdvisorOptions() {
         addBotMessage('Puedes contactar a un asesor:', [
@@ -248,7 +237,7 @@ document.addEventListener('DOMContentLoaded', function() {
         addBotMessage('¿Cómo puedo ayudarte hoy?', [
             { text: 'Vehículos disponibles', value: 'vehiculos' },
             { text: 'Agendar cita', value: 'agendar' },
-            { text: 'Promociones', value: 'promociones' },
+
             { text: 'Contactar asesor', value: 'asesor' }
         ]);
     }

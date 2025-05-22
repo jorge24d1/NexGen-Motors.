@@ -19,6 +19,9 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/",
                                 "/usuario/Inicio",
+                                "/ubicaciones",
+                                "/terminos",
+                                "/cookies",
 
                                 "/usuario",
                                 "/registro",

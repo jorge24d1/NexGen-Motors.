@@ -68,53 +68,42 @@
         <div class="footer-column">
             <h3>Vehículos</h3>
             <ul>
-                <li><a href="#">Nuevos modelos</a></li>
-                <li><a href="#">Seminuevos</a></li>
-                <li><a href="#">Eléctricos e híbridos</a></li>
-                <li><a href="#">Promociones</a></li>
-                <li><a href="#">Cotizador en línea</a></li>
+                <li><a href="/vehiculos">Nuevos modelos</a></li>
+                <li><a href="/vehiculos">Promociones</a></li>
             </ul>
         </div>
+
         <div class="footer-column">
             <h3>Servicios</h3>
             <ul>
-                <li><a href="#">Agendar servicio</a></li>
-                <li><a href="#">Estado de mi vehículo</a></li>
-                <li><a href="#">Garantías</a></li>
-                <li><a href="#">Accesorios</a></li>
-                <li><a href="#">Asistencia vial</a></li>
+                <li><a th:href="@{/usuario/cita}">Agendar servicio</a></li>
+                <li><a href="/garantias">Garantías</a></li>
+
+
             </ul>
         </div>
-        <div class="footer-column">
-            <h3>Financiamiento</h3>
-            <ul>
-                <li><a href="#">Crédito automotriz</a></li>
-                <li><a href="#">Leasing</a></li>
-                <li><a href="#">Seguros</a></li>
-                <li><a href="#">Calculadora de pagos</a></li>
-                <li><a href="#">Preguntas frecuentes</a></li>
-            </ul>
-        </div>
+
         <div class="footer-column">
             <h3>Concesionario</h3>
             <ul>
-                <li><a href="#">Sobre nosotros</a></li>
-                <li><a href="#">Trabaja con nosotros</a></li>
-                <li><a href="#">Eventos</a></li>
-                <li><a href="#">Noticias</a></li>
-                <li><a href="#">Contáctanos</a></li>
+                <li><a href="/nosotros">Sobre nosotros</a></li>
+                <li><a href="/ubicaciones">Ubicaciones</a></li>
+                <li><a href="#contact">Contáctanos</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-column">
+            <h3>Legal</h3>
+            <ul>
+                <li><a href="/terminos">Términos y condiciones</a></li>
+                <li><a href="/cookies">Cookies y Aviso legal</a></li>
             </ul>
         </div>
     </div>
-    <div class="social-links">
-        <a href="#"><i class="fab fa-facebook-f"></i></a>
-        <a href="#"><i class="fab fa-twitter"></i></a>
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-youtube"></i></a>
-        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-    </div>
+
+
     <div class="copyright">
-        <p>© 2023 Concesionario KIA. Todos los derechos reservados.</p>
+        <p>&copy; 2023 Concesionario. Todos los derechos reservados.</p>
     </div>
 </footer>
 
