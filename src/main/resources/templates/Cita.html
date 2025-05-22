@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendar Cita - Concesionario Oficial</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link th:href="@{/css/Cita.css}" rel="stylesheet">
+    <link th:href="@{/css/stilechatbot.css}" rel="stylesheet">
+</head>
+<body>
+<!-- Barra de navegación -->
+<nav id="mainNav">
+    <div class="nav-logo logo-container">
+        <span class="logo-nexgen">NexGen</span>
+        <span class="logo-motors">Motors</span>
+    </div>
+    <div class="nav-links">
+        <a href="/vehiculos">Vehículos</a>
+        <a th:href="@{/usuario/agendamiento}">Agendamiento online</a>
+        <!-- <a href="/login">Iniciar sesión</a> -->
+        <a href="/usuario/cita">Cita</a>
+        <a href="/usuario/perfil"> perfil</a>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<div class="hero">
+    <div class="hero-content">
+        <h1>Agenda tu cita con nosotros</h1>
+        <p>Nuestros expertos están listos para atenderte y brindarte la mejor experiencia Nexgen Motors</p>
+    </div>
+</div>
+
+<!-- Form Container -->
+<div class="form-container">
+    <div class="form-header">
+        <h2 class="section-title">Formulario de Cita</h2>
+        <p class="section-subtitle">Completa los siguientes datos para agendar tu cita</p>
+    </div>
+
+    <form class="appointment-form" action="#" th:action="@{/usuario/cita/guardar}" th:object="${cita}" method="post">
+        <div class="categoria-container">
+            <div class="categoria-item" onclick="seleccionarCategoria('Interés en Vehículo', this)" th:classappend="${cita.tipo == 'Interés en Vehículo'} ? 'selected' : ''">
+                <i class="fas fa-car"></i>
+                <p>Interés en Vehículo</p>
+            </div>
+            <div class="categoria-item" onclick="seleccionarCategoria('Información Taller', this)" th:classappend="${cita.tipo == 'Información Taller'} ? 'selected' : ''">
+                <i class="fas fa-tools"></i>
+                <p>Información Taller</p>
+            </div>
+            <div class="categoria-item" onclick="seleccionarCategoria('Mantenimiento', this)" th:classappend="${cita.tipo == 'Mantenimiento'} ? 'selected' : ''">
+                <i class="fas fa-wrench"></i>
+                <p>Mantenimiento</p>
+            </div>
+            <div class="categoria-item" onclick="seleccionarCategoria('Garantías', this)" th:classappend="${cita.tipo == 'Garantías'} ? 'selected' : ''">
+                <i class="fas fa-shield-alt"></i>
+                <p>Garantías</p>
+            </div>
+            <div class="categoria-item" onclick="seleccionarCategoria('Otros', this)" th:classappend="${cita.tipo == 'Otros'} ? 'selected' : ''">
+                <i class="fas fa-ellipsis-h"></i>
+                <p>Otros</p>
+            </div>
+        </div>
+        <input type="hidden" id="tipo" th:field="*{tipo}" required>
+
+        <!-- <div id="vehiculoContainer" th:style="${cita.tipo == 'Interés en Vehículo'} ? 'display: block;' : 'display: none;'"> -->
+        <div id="vehiculoContainer">
+
+            <div class="form-group">
+                <label for="vehiculo">Selecciona un vehículo:</label>
+                <select id="vehiculo" class="select2" th:field="*{vehiculoId}" onchange="actualizarNombreVehiculo()">
+                    <option value="">-- Selecciona un vehículo --</option>
+                    <option th:each="vehiculo : ${vehiculos}"
+                            th:value="${vehiculo.id}"
+                            th:data-nombre="${vehiculo.marca + ' ' + vehiculo.modelo}"
+                            th:data-colores="${vehiculo.colores != null ? #strings.listJoin(vehiculo.colores, ',') : ''}"
+                            th:selected="${cita.vehiculoId == vehiculo.id}"
+                            th:text="${vehiculo.marca + ' ' + vehiculo.modelo + ' (' + vehiculo.año + ')'}">
+                    </option>
+                </select>
+                <input type="hidden" id="nombreVehiculo" th:field="*{nombreVehiculo}">
+            </div>
+            <!-- <div class="form-group">
+                <label for="vehiculo">Selecciona un vehículo:</label>
+                <select id="vehiculo" class="select2"  th:field="*{vehiculoId}" onchange="actualizarNombreVehiculo()">
+                    <option value="">-- Selecciona un vehículo --</option>
+                    <option th:each="vehiculo : ${vehiculos}"
+                            th:value="${vehiculo.id}"
+                            th:data-nombre="${vehiculo.marca + ' ' + vehiculo.modelo}"
+                            th:data-colores="${vehiculo.colores != null ? #strings.listJoin(vehiculo.colores, ',') : ''}"
+                            th:selected="${cita.vehiculoId == vehiculo.id}"
+                            th:text="${vehiculo.marca + ' ' + vehiculo.modelo + ' (' + vehiculo.año + ')'}">
+                    </option>
+                </select>
+                <input type="hidden" id="nombreVehiculo" th:field="*{nombreVehiculo}">
+            </div> -->
+
+            <!-- AÑADE ESTE NUEVO BLOQUE PARA LOS COLORES -->
+            <!-- <div class="form-group" id="colorContainer" th:style="${cita.tipo == 'Interés en Vehículo' and cita.vehiculoId != null} ? 'display: block;' : 'display: none;'"></div> -->
+            <div class="form-group" id="colorContainer" style="display: block;">
+                <label for="colorVehiculo">Color del vehículo:</label>
+                <select id="colorVehiculo" th:field="*{colorVehiculo}">
+                    <option value="">-- Selecciona un color --</option>
+                    <option th:each="color : ${coloresVehiculo ?: #strings.listSplit('Rojo,Azul,Blanco,Negro,Gris', ',')}"
+                            th:value="${color}"
+                            th:selected="${cita.colorVehiculo == color}"
+                            th:text="${color}">
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <!-- <div id="modeloContainer" th:style="${cita.tipo == 'Interés en Vehículo'} ? 'display: none;' : 'display: block;'">
+            <div class="form-group">
+                <label for="modelo">Modelo:</label>
+                <input type="text" id="modelo" th:field="*{modelo}">
+            </div>
+        </div> -->
+
+        <div class="form-group">
+            <label for="nombres">Nombres:</label>
+            <input type="text" id="nombres"
+                   th:value="${cita?.usuario?.nombres}"
+                   th:field="*{nombres}"readonly
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="apellidos">Apellidos:</label>
+            <input type="text" id="apellidos" th:field="*{apellidos}" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="cedula">Cédula:</label>
+            <input type="text" id="cedula" th:field="*{cedula}" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="correoElectronico">Correo electrónico:</label>
+            <input type="email" id="correoElectronico" th:field="*{correoElectronico}" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="telefono">Teléfono:</label>
+            <input type="text" id="telefono" th:field="*{telefono}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="sede">Sede:</label>
+            <select id="sede" th:field="*{sede}" required>
+                <option value="">-- Selecciona una sede --</option>
+                <option value="NexGen Motors Bocagrande">NexGen Motors Bocagrande</option>
+                <option value="NexGen Motors La Boquilla">NexGen Motors La Boquilla</option>
+                <option value="NexGen Motors El Laguito">NexGen Motors El Laguito</option>
+                <option value="NexGen Motors Manga">NexGen Motors Manga</option>
+            </select>
+        </div>
+
+        <!-- Campo de comentario (solo visible si no es "Interés en Vehículo") -->
+        <!-- <div id="comentarioContainer" th:style="${cita.tipo == 'Interés en Vehículo'} ? 'display: none;' : 'display: block;'"></div> -->
+        <div id="comentarioContainer" th:style="${cita.tipo == 'Otros'} ? 'display: block;' : 'display: none;'">
+            <div class="form-group">
+                <label for="comentario">Comentario:</label>
+                <textarea id="comentario" th:field="*{comentario}"></textarea>
+            </div>
+        </div>
+
+        <!-- <input type="hidden" name="cedula" th:value="${cita.cedula}"> -->
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Enviar solicitud</button>
+            <a href="/" class="btn btn-secondary">Regresar</a>
+        </div>
+    </form>
+</div>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-content">
+        <div class="footer-column">
+            <h3>Vehículos</h3>
+            <ul>
+                <li><a href="/vehiculos">Nuevos modelos</a></li>
+                <li><a href="/vehiculos">Promociones</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-column">
+            <h3>Servicios</h3>
+            <ul>
+                <li><a th:href="@{/usuario/cita}">Agendar servicio</a></li>
+                <li><a href="/garantias">Garantías</a></li>
+
+
+            </ul>
+        </div>
+
+        <div class="footer-column">
+            <h3>Concesionario</h3>
+            <ul>
+                <li><a href="/nosotros">Sobre nosotros</a></li>
+                <li><a href="/ubicaciones">Ubicaciones</a></li>
+                <li><a href="#contact">Contáctanos</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-column">
+            <h3>Legal</h3>
+            <ul>
+                <li><a href="/terminos">Términos y condiciones</a></li>
+                <li><a href="/cookies">Cookies y Aviso legal</a></li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="copyright">
+        <p>&copy; 2023 Concesionario. Todos los derechos reservados.</p>
+    </div>
+</footer>
+
+<!-- Snackbar -->
+<div id="snackbar">Some text some message..</div>
+
+<!-- Botón de WhatsApp -->
+<div th:replace="~{fragments/chatbot :: chatbot}"></div>
+<script th:src="@{/js/chatbot.js}"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+    // Función para actualizar el nombre del vehículo y colores
+    function actualizarNombreVehiculo() {
+        const vehiculoSelect = document.getElementById('vehiculo');
+        const nombreVehiculoInput = document.getElementById('nombreVehiculo');
+        const colorSelect = document.getElementById('colorVehiculo');
+        const selectedOption = vehiculoSelect.options[vehiculoSelect.selectedIndex];
+
+        nombreVehiculoInput.value = selectedOption.getAttribute('data-nombre') || '';
+
+        // Mantener el color seleccionado actual
+        const colorActual = colorSelect.value;
+        colorSelect.innerHTML = '<option value="">-- Selecciona un color --</option>';
+
+        if (selectedOption.value) {
+            const colores = selectedOption.getAttribute('data-colores')?.split(',') || [];
+            const coloresGenericos = ['Rojo', 'Azul', 'Blanco', 'Negro', 'Gris'];
+            const coloresDisponibles = colores.length > 0 ? colores : coloresGenericos;
+
+            coloresDisponibles.forEach(color => {
+                if (color.trim()) {
+                    const option = new Option(color.trim(), color.trim());
+                    colorSelect.add(option);
+                    // Restaurar selección previa si coincide
+                    if (color.trim() === colorActual) {
+                        option.selected = true;
+                    }
+                }
+            });
+        }
+    }
+
+    // Función para seleccionar categoría (modificada)
+    function seleccionarCategoria(categoria, elemento) {
+        // Limpiar selecciones previas
+        document.querySelectorAll('.categoria-item').forEach(item => {
+            item.classList.remove('selected');
+        });
+
+        // Seleccionar nueva categoría
+        elemento.classList.add('selected');
+        document.getElementById('tipo').value = categoria;
+
+        // Mostrar/ocultar comentario según categoría
+        if (categoria === 'Otros') {
+            document.getElementById('comentarioContainer').style.display = 'block';
+        } else {
+            document.getElementById('comentarioContainer').style.display = 'none';
+        }
+    }
+
+    // Inicialización cuando el DOM está listo
+    $(document).ready(function() {
+        // Inicializar Select2
+        $('#vehiculo').select2({
+            placeholder: "-- Selecciona un vehículo --",
+            allowClear: true,
+            width: '100%'
+        });
+
+        // Verificar si viene de explorar vehículo
+        const urlParams = new URLSearchParams(window.location.search);
+        const vehiculoId = urlParams.get('vehiculoId');
+        const color = urlParams.get('color');
+
+        if(vehiculoId) {
+            // Seleccionar automáticamente la categoría "Interés en Vehículo"
+            const categoriaInteres = document.querySelector('.categoria-item:first-child');
+            seleccionarCategoria('Interés en Vehículo', categoriaInteres);
+
+            // Esperar a que Select2 se inicialice
+            setTimeout(() => {
+                // Seleccionar el vehículo en el dropdown
+                $('#vehiculo').val(vehiculoId).trigger('change');
+
+                // Si hay color, seleccionarlo
+                if(color) {
+                    setTimeout(() => {
+                        $('#colorVehiculo').val(color).trigger('change');
+                    }, 300);
+                }
+            }, 300);
+        }
+
+        // Inicializar el campo de colores
+        actualizarNombreVehiculo();
+    });
+
+    // Resto de funciones existentes (scroll, snackbar, etc.) se mantienen igual
+</script>
+
+</body>
+</html>
